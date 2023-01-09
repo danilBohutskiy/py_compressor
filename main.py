@@ -42,7 +42,6 @@ def initDirectories():
     else:
         os.mkdir(inputpath)
 
-
 def run():
     print('Start...')
     initDirectories()
