@@ -1,5 +1,9 @@
-import os, pathlib, shutil, json, PIL
+import os, shutil, mimetypes, json, PIL
 from PIL import Image
+
+from modules.GifCompressor   import GifCompressor
+from modules.VideoCompressor import VideoCompressor
+from modules.ImageCompressor import ImageCompressor
 
 class Compressor:
 
@@ -38,25 +42,24 @@ class Compressor:
             os.mkdir(dirpath)
         else:
             os.mkdir(dirpath)
-    
-    def compressImage(self, filename):
-        img = PIL.Image.open(filename)
-        
-        myHeight, myWidth = img.size
-        img.resize((myHeight, myWidth), Image.Resampling.LANCZOS)
-        
-        return img
 
-    def saveImgToDir(self, img, path, file_name, new_file_name = None):
-        dirpath = os.path.join(self.workdir, self.outputdir, path)
-        
-        file_ext = pathlib.Path(file_name).suffix
+    def compress(self, path_to_file, path_to_output, filename, object):
+        object.compress(path_to_file, path_to_output, filename)
+        pass
 
-        filename = None
-        if new_file_name:
-            filename = new_file_name + file_ext
-        else:
-            filename = file_name
+    def getPathToSrcFile(self, filename):
+        return os.path.abspath(filename)
 
-        filepath = os.path.join(dirpath, filename)    
-        img.save(filepath)
+    def getPathToOutputDirectory(self, directory):
+        return os.path.join(self.workdir, self.outputdir, directory)
+
+    def getCompressor(self, filename):
+        item = mimetypes.guess_type(filename)[0]
+
+        if item.startswith('video'):
+            return VideoCompressor()
+        elif item.endswith('gif'):
+            return GifCompressor()
+        elif item.startswith('image'):
+            return ImageCompressor()
+        return None

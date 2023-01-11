@@ -1,0 +1,19 @@
+import os, PIL
+from PIL import Image
+
+class ImageCompressor:
+
+    def compress(self, path_to_file, path_to_output, filename):
+        filepath = os.path.join(path_to_output, filename)
+
+        img = self.getImage(path_to_file)   
+        img.save(filepath)
+
+    def getImage(self, filename):
+        img = PIL.Image.open(filename)
+        
+        myHeight, myWidth = img.size
+        img.resize((myHeight, myWidth), Image.Resampling.LANCZOS)
+        
+        return img
+

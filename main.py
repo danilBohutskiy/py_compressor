@@ -1,5 +1,6 @@
 import os
-from Compressor import *
+
+from Compressor import Compressor
 
 def run():
     
@@ -15,9 +16,16 @@ def run():
         model.clearOutputDir(directory)
 
         for index, filename in enumerate(os.listdir()):
-            img = model.compressImage(filename)
-            model.saveImgToDir(img, directory, filename)
-            
+            pathToFile = model.getPathToSrcFile(filename)
+            pathToOutput = model.getPathToOutputDirectory(directory)
+
+            compressor = model.getCompressor(pathToFile)
+
+            if compressor == None:
+                continue
+
+            compressor.compress(pathToFile, pathToOutput, filename)
+
         os.chdir('..')
     
     print('Done!')
