@@ -9,4 +9,5 @@ class VideoCompressor:
         file_path = os.path.join(path_to_output, filename_new)
 
         cmd = f'ffmpeg -i "{path_to_file}" -vcodec libx265 -crf 28 "{file_path}"'
-        result = subprocess.Popen(cmd, shell=True)
+        result = subprocess.run(cmd, shell=True)
+        print(result)

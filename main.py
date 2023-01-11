@@ -1,4 +1,4 @@
-import os
+import os, time
 
 from Compressor import Compressor
 
@@ -16,6 +16,8 @@ def run():
         model.clearOutputDir(directory)
 
         for index, filename in enumerate(os.listdir()):
+            print('Current file: ' + filename)
+            
             pathToFile = model.getPathToSrcFile(filename)
             pathToOutput = model.getPathToOutputDirectory(directory)
 

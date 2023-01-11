@@ -56,7 +56,9 @@ class Compressor:
     def getCompressor(self, filename):
         item = mimetypes.guess_type(filename)[0]
 
-        if item.startswith('video'):
+        if item == None:
+            return None
+        elif item.startswith('video'):
             return VideoCompressor()
         elif item.endswith('gif'):
             return GifCompressor()
