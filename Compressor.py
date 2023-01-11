@@ -1,5 +1,4 @@
-import os, shutil, mimetypes, json, PIL
-from PIL import Image
+import os, shutil, mimetypes, json
 
 from modules.GifCompressor   import GifCompressor
 from modules.VideoCompressor import VideoCompressor
