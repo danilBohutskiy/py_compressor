@@ -44,7 +44,6 @@ class Compressor:
 
     def compress(self, path_to_file, path_to_output, filename, object):
         object.compress(path_to_file, path_to_output, filename)
-        pass
 
     def getPathToSrcFile(self, filename):
         return os.path.abspath(filename)
@@ -53,14 +52,17 @@ class Compressor:
         return os.path.join(self.workdir, self.outputdir, directory)
 
     def getCompressor(self, filename):
-        item = mimetypes.guess_type(filename)[0]
+        filetype = mimetypes.guess_type(filename)[0]
 
-        if item == None:
-            return None
-        elif item.startswith('video'):
-            return VideoCompressor()
-        elif item.endswith('gif'):
-            return GifCompressor()
-        elif item.startswith('image'):
-            return ImageCompressor()
-        return None
+        compressor = None
+
+        if filetype == None:
+            compressor = None
+        elif filetype.startswith('video'):
+            compressor = VideoCompressor()
+        elif filetype.endswith('gif'):
+            compressor = GifCompressor()
+        elif filetype.startswith('image'):
+            compressor = ImageCompressor()
+            
+        return compressor
