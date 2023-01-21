@@ -1,5 +1,7 @@
 import os, shutil, mimetypes, json
 
+from hurry.filesize import size
+
 from modules.GifCompressor   import GifCompressor
 from modules.VideoCompressor import VideoCompressor
 from modules.ImageCompressor import ImageCompressor
@@ -45,7 +47,7 @@ class Compressor:
     def compress(self, path_to_file, path_to_output, filename, object):
         object.compress(path_to_file, path_to_output, filename)
 
-    def getPathToSrcFile(self, filename):
+    def getPathToSrcFie(self, filename = ''):
         return os.path.abspath(filename)
 
     def getPathToOutputDirectory(self, directory):
@@ -66,3 +68,11 @@ class Compressor:
             compressor = ImageCompressor()
             
         return compressor
+
+    def getDirSize(self, path):
+        total = 0
+        with os.scandir(path) as it:
+            for entry in it:
+                if entry.is_file():
+                    total += entry.stat().st_size
+        return size(total)  
