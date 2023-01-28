@@ -1,16 +1,17 @@
-import os
+import os, argparse, shutil
+parser = argparse.ArgumentParser(description='Compressor for image files, video and gifs')
+parser.add_argument("-c", "--clear_src", help="Clear src folder with files after compressing", action="store_true")
+parser.add_argument("-s", "--sort_filename", help="Change output filename to number", action="store_true")
 
 from colorama import init as colorama_init
 from colorama import Back
 from colorama import Fore
 from colorama import Style
-
 colorama_init()
 
 from Compressor import Compressor
 
 def run():
-    
     print('Start...')
 
     model = Compressor(os.getcwd())
@@ -19,8 +20,9 @@ def run():
     for directory in os.listdir():
         os.chdir('./' + directory)
         print(f"{Fore.YELLOW}Current directory:{Style.RESET_ALL} " + directory)
-        model.clearOutputDir(directory)
+        pathToSrc = model.getPathToSrcFie('')
 
+        model.clearOutputDir(directory)
         for index, filename in enumerate(os.listdir()):
             
             print('Current file: ' + filename)
@@ -33,6 +35,11 @@ def run():
             if compressor == None:
                 continue
 
+            if (parser.parse_args().sort_filename):
+                filename = filename.split('.')
+                filename = str((index + 1)) + '.' + filename[1]
+                pass
+
             compressor.compress(pathToFile, pathToOutput, filename)
         
         srcSize = model.getDirSize(model.getPathToSrcFie(''))
@@ -43,7 +50,15 @@ def run():
         print(f"{Fore.YELLOW}Compressed size:{Style.RESET_ALL} " + outSize)
 
         os.chdir('..')
+
+        if (parser.parse_args().clear_src):
+            shutil.rmtree(pathToSrc)
+            print(f"{Fore.YELLOW}Directory removed!{Style.RESET_ALL}")
+            pass
+
     
     print('Done!')
+    print("Press Enter to exit...")
+    input()
 
 run()
