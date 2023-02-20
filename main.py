@@ -22,19 +22,18 @@ def run():
         print(f"{Fore.YELLOW}Current directory:{Style.RESET_ALL} " + directory)
         pathToSrc = model.getPathToSrcFie('')
 
+        files = getFileListSorted(pathToSrc);
         model.clearOutputDir(directory)
-        for index, filename in enumerate(os.listdir()):
-            
+        for index, pathToFile in enumerate(files):
+            filename = os.path.basename(pathToFile)
             print('Current file: ' + filename)
             
-            pathToFile = model.getPathToSrcFie(filename)
             pathToOutput = model.getPathToOutputDirectory(directory)
-
             compressor = model.getCompressor(pathToFile)
 
             if compressor == None:
                 continue
-
+            
             if (parser.parse_args().sort_filename):
                 filename = filename.split('.')
                 filename = str((index + 1)) + '.' + filename[1]
@@ -60,5 +59,11 @@ def run():
     print('Done!')
     print("Press Enter to exit...")
     input()
+
+def getFileListSorted(dirpath):
+    file_list = os.listdir(dirpath)
+    full_list = [os.path.join(dirpath, i) for i in file_list]
+    files = sorted(full_list, key = os.path.getmtime)
+    return files
 
 run()
