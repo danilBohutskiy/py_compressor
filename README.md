@@ -11,7 +11,7 @@
 ```sh
 sudo apt update && sudo apt upgrade
 sudo apt install -y gifsicle
-sudo apt install ffmpeg
+sudo apt install -y ffmpeg
 
 git clone git@github.com:danilBohutskiy/py_compressor.git
 cd py_compressor/
