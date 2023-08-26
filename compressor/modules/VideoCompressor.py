@@ -9,7 +9,7 @@ class VideoCompressor:
     FORMAT_MP4 = '.mp4'
 
     def compress(self, path_to_file):
-        path_new = self.get_new_path(path_to_file)
+        path_new = FileHelper.rename_filename_with_format(path_to_file, self.FORMAT_MP4, True)
         cmd = f'ffmpeg -nostats -loglevel 0 -i "{path_to_file}" -vcodec libx265 -x265-params log-level=none -crf 28 "{path_new}" && rm "{path_to_file}"'
         subprocess.run(cmd, shell=True)
         FileHelper.rename_path(path_new, path_to_file)

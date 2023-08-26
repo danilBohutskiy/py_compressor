@@ -1,4 +1,5 @@
 import os
+import uuid
 import tkinter as tk
 
 from pathlib import Path
@@ -41,6 +42,26 @@ class FileHelper:
     def rename_path(file_path, file_path_new):
         path = Path(file_path)
         path.rename(file_path_new)
+
+    def delete_file(file_path):
+        os.remove(file_path)
+
+    def rename_filename_with_format(file_path, format, filename_unique = False):
+        filename = FileHelper.get_filename_from_path(file_path)
+        filename_ext = os.path.splitext(filename)
+        filename_base = filename_ext[0]
+        if filename_unique:
+            filename_new = FileHelper.generate_unique_filename(filename_base) + format
+        else:
+            filename_new = filename_base + format
+        filename_new = filename_new.replace(" ", "_")
+        path_new = FileHelper.change_path_filename(file_path, filename_new)
+        return path_new
+
+    def generate_unique_filename(base_filename):
+        unique_id = uuid.uuid4().hex[:6] 
+        unique_filename = f"{base_filename}_{unique_id}"
+        return unique_filename
 
     def get_file_list(folder_path):
         file_list = []
