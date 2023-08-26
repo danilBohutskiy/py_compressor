@@ -1,15 +1,11 @@
-import os, PIL
+import PIL
 from PIL import Image
 
 class ImageCompressor:
 
-    def compress(self, path_to_file, path_to_output, filename):
-        name, extension = os.path.splitext(filename)
-        
-        filepath = os.path.join(path_to_output, (name + '.jpg'))
-
+    def compress(self, path_to_file):
         img = self.getImage(path_to_file)   
-        img.save(filepath)
+        img.save(path_to_file)
 
     def getImage(self, filename):
         img = PIL.Image.open(filename)

@@ -1,69 +1,32 @@
-import os, argparse, shutil
-parser = argparse.ArgumentParser(description='Compressor for image files, video and gifs')
-parser.add_argument("-c", "--clear_src", help="Clear src folder with files after compressing", action="store_true")
-parser.add_argument("-s", "--sort_filename", help="Change output filename to number", action="store_true")
+from compressor.FileCompressor import FileCompressor
+from components.FileHelper import FileHelper
+from components.ColoramaHelper import ColoramaHelper
 
-from colorama import init as colorama_init
-from colorama import Back
-from colorama import Fore
-from colorama import Style
-colorama_init()
+def main():
+    src_directory = FileHelper.ask_directory()
+    directories = FileHelper.get_list_directories(src_directory)
+    file_compressor = FileCompressor()
+    colorama_helper = ColoramaHelper()
 
-from Compressor import Compressor
+    for directory in directories:
+        colorama_helper.print_current_dir(directory)
+        process_directory(directory, file_compressor, colorama_helper)
 
-def run():
-    print('Start...')
+def process_directory(directory, file_compressor, colorama_helper):
+    file_list = FileHelper.get_file_list(directory)
+    dir_original_size = FileHelper.get_dir_size(directory)
 
-    model = Compressor(os.getcwd())
-    os.chdir('./' + model.inputdir)
+    for path_to_file in file_list:
+        filename = FileHelper.get_filename_from_path(path_to_file)
+        colorama_helper.print_current_file(filename)
 
-    for directory in os.listdir():
-        os.chdir('./' + directory)
-        print(f"{Fore.YELLOW}Current directory:{Style.RESET_ALL} " + directory)
-        pathToSrc = model.getPathToSrcFie('')
+        compressor_instance = file_compressor.create(path_to_file)
+        if compressor_instance is None:
+            continue
 
-        files = getFileListSorted(pathToSrc);
-        model.clearOutputDir(directory)
-        for index, pathToFile in enumerate(files):
-            filename = os.path.basename(pathToFile)
-            print('Current file: ' + filename)
-            
-            pathToOutput = model.getPathToOutputDirectory(directory)
-            compressor = model.getCompressor(pathToFile)
+        compressor_instance.compress(path_to_file)
+    dir_compressed_size = FileHelper.get_dir_size(directory)
+    colorama_helper.print_comparison_directories_size(directory, dir_original_size, dir_compressed_size)
 
-            if compressor == None:
-                continue
-            
-            if (parser.parse_args().sort_filename):
-                filename = filename.split('.')
-                filename = str((index + 1)) + '.' + filename[1]
-                pass
-
-            compressor.compress(pathToFile, pathToOutput, filename)
-        
-        srcSize = model.getDirSize(model.getPathToSrcFie(''))
-        outSize = model.getDirSize(model.getPathToOutputDirectory(directory)) 
-
-        print(f"{Fore.GREEN}Directory{Style.RESET_ALL} " + directory + f"{Fore.GREEN} compressed!{Style.RESET_ALL}")
-        print(f"{Fore.GREEN}Original size:{Style.RESET_ALL} " + srcSize)
-        print(f"{Fore.YELLOW}Compressed size:{Style.RESET_ALL} " + outSize)
-
-        os.chdir('..')
-
-        if (parser.parse_args().clear_src):
-            shutil.rmtree(pathToSrc)
-            print(f"{Fore.YELLOW}Directory removed!{Style.RESET_ALL}")
-            pass
-
-    
-    print('Done!')
-    print("Press Enter to exit...")
-    input()
-
-def getFileListSorted(dirpath):
-    file_list = os.listdir(dirpath)
-    full_list = [os.path.join(dirpath, i) for i in file_list]
-    files = sorted(full_list, key = os.path.getmtime)
-    return files
-
-run()
+if __name__ == "__main__":
+    main()
