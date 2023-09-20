@@ -12,11 +12,13 @@
 sudo apt update && sudo apt upgrade
 sudo apt install -y gifsicle
 sudo apt install -y ffmpeg
+sudo apt install -y python3-tk
 
-git clone git@github.com:danilBohutskiy/py_compressor.git
+git clone git@github.com:danilBohutskiy/py_compressor.git py_compressor
 cd py_compressor/
 
 pip install -r requirements.txt
+pip install hurry.filesize
 ```
 
 ## Usage
@@ -26,8 +28,8 @@ After installing, you need to:
 ```sh
 python3 main.py
 ```
-3. Add your media folders to INPUTDIR
-4. Run main.py file.
+3. Choose your folder
+4. Start.
 
 ## License
 
