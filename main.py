@@ -23,8 +23,12 @@ def process_directory(directory, file_compressor, colorama_helper):
         compressor_instance = file_compressor.create(path_to_file)
         if compressor_instance is None:
             continue
+        
+        try:
+            compressor_instance.compress(path_to_file)
+        except Exception as e:
+            print(f"Error: {e}")
 
-        compressor_instance.compress(path_to_file)
     dir_compressed_size = FileHelper.get_dir_size(directory)
     colorama_helper.print_comparison_directories_size(directory, dir_original_size, dir_compressed_size)
 
