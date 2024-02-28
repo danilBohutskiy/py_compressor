@@ -1,9 +1,19 @@
+import argparse
+
 from compressor.FileCompressor import FileCompressor
 from components.FileHelper import FileHelper
 from components.ColoramaHelper import ColoramaHelper
 
 def main():
-    src_directory = FileHelper.ask_directory()
+    parser = argparse.ArgumentParser(description='Compress files in a directory')
+    parser.add_argument('-path', type=str, help='Path to directory')
+    args = parser.parse_args()
+
+    if args.path:
+        src_directory = args.path
+    else:
+        src_directory = FileHelper.ask_directory()
+
     directories = FileHelper.get_list_directories(src_directory)
     file_compressor = FileCompressor()
     colorama_helper = ColoramaHelper()
