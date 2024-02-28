@@ -14,7 +14,7 @@ def main():
     else:
         src_directory = FileHelper.ask_directory()
 
-    directories = FileHelper.get_list_directories(src_directory)
+    directories = [src_directory] + FileHelper.get_list_directories(src_directory)
     file_compressor = FileCompressor()
     colorama_helper = ColoramaHelper()
 
