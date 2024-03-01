@@ -65,8 +65,8 @@ class FileHelper:
 
     def get_file_list(folder_path):
         file_list = []
-        for root, dirs, files in os.walk(folder_path):
-            for file_name in files:
-                file_path = os.path.join(root, file_name)
+        for file_name in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, file_name)
+            if os.path.isfile(file_path):
                 file_list.append(file_path)
         return file_list

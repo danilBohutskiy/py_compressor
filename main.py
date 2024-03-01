@@ -24,8 +24,11 @@ def main():
 
 def process_directory(directory, file_compressor, colorama_helper):
     file_list = FileHelper.get_file_list(directory)
+    if not file_list:
+        print('Files not found!')
+        return
+    
     dir_original_size = FileHelper.get_dir_size(directory)
-
     for path_to_file in file_list:
         filename = FileHelper.get_filename_from_path(path_to_file)
         colorama_helper.print_current_file(filename)
